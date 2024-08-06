@@ -2,7 +2,7 @@ package com.application.bsbookservice.service.impl;
 
 import com.application.bsbookservice.dto.book.BookDto;
 import com.application.bsbookservice.dto.category.CategoryByIdsRequestDto;
-import com.application.bsbookservice.dto.category.CategoryDto;
+import com.application.bsbookservice.feign.client.CategoryFeignClient;
 import com.application.bsbookservice.mapper.BookMapper;
 import com.application.bsbookservice.model.Book;
 import com.application.bsbookservice.repo.BookRepository;
@@ -10,10 +10,7 @@ import com.application.bsbookservice.service.BookService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.List;
 
 @Service
@@ -22,7 +19,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
-    private final WebClient webClient;
+    private final CategoryFeignClient categoryFeignClient;
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
@@ -41,21 +38,9 @@ public class BookServiceImpl implements BookService {
 
     private BookDto convertToBookDto(Book book) {
         BookDto bookDto = bookMapper.toDto(book);
-        bookDto.setCategories(fetchCategoryDtoList(book.getCategoryIds()));
+
+        CategoryByIdsRequestDto requestDto = new CategoryByIdsRequestDto(book.getCategoryIds());
+        bookDto.setCategories(categoryFeignClient.getCategoryDetailsByIds(requestDto));
         return bookDto;
-    }
-
-    private List<CategoryDto> fetchCategoryDtoList(List<Long> categoryIds) {
-        CategoryByIdsRequestDto payload = new CategoryByIdsRequestDto(categoryIds);
-
-        return webClient
-                .post()
-                .uri("/details-by-ids")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(payload)
-                .retrieve()
-                .bodyToFlux(CategoryDto.class)
-                .collectList()
-                .block();
     }
 }
