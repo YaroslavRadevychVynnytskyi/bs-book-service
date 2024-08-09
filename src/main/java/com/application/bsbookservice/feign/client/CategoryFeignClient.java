@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
-@FeignClient(name = "bs-category-service", url = "${categories.service.url}")
+@FeignClient(name = "bs-api-gateway", path = "bs-category-service/categories")
 public interface CategoryFeignClient {
     @PostMapping("/details-by-ids")
     List<CategoryDto> getCategoryDetailsByIds(@RequestBody CategoryByIdsRequestDto requestDto);
