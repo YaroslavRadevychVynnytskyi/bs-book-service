@@ -1,8 +1,5 @@
 package com.application.bsbookservice.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,9 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SoftDelete;
 
 @Entity
@@ -23,6 +24,7 @@ import org.hibernate.annotations.SoftDelete;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +39,7 @@ public class Book {
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
 
-    @Column(name = "price",nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     @Column(name = "description")
