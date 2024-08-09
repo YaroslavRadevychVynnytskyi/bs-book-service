@@ -4,13 +4,11 @@ import com.application.bsbookservice.dto.category.CategoryByIdsRequestDto;
 import com.application.bsbookservice.dto.category.CategoryDto;
 import com.application.bsbookservice.feign.client.CategoryFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +21,10 @@ public class CategoryService {
         return categoryFeignClient.getCategoryDetailsByIds(requestDto);
     }
 
-    public List<CategoryDto> fallbackGetCategoryDetailsByIds(CategoryByIdsRequestDto requestDto, Throwable tw) {
+    public List<CategoryDto> fallbackGetCategoryDetailsByIds(
+            CategoryByIdsRequestDto requestDto,
+            Throwable tw
+    ) {
         logger.warning(tw.getMessage());
         return Collections.emptyList();
     }

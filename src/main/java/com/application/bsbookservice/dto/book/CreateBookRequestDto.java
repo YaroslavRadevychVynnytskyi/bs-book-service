@@ -1,18 +1,30 @@
 package com.application.bsbookservice.dto.book;
 
-import com.application.bsbookservice.dto.category.CategoryDto;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class BookDto {
-    private Long id;
+public class CreateBookRequestDto {
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String author;
+
+    @NotBlank
     private String isbn;
+
+    @Min(1)
     private BigDecimal price;
+
+    @Size(min = 10, max = 255)
     private String description;
+
     private String coverImage;
-    private List<CategoryDto> categories;
+
+    private List<Long> categoryIds;
 }
